@@ -72,3 +72,31 @@ ajax.post = function(url, data, callback){
   // 调用send方法
   xhr.send(addData);
 }
+
+// 仿照jquery的serialize方法，可以传入表单元素，就可以获得序列化后的键值对
+ajax.serialize = function(form){
+  var result = '';
+  // 首先得到表单中的所有控件（form.elements)
+  var elements  = form.elements;
+  //
+  var arr = [];
+  for(var i = 0;i< elements.length; i++){
+    // 判断该元素是否有name属性
+    if(elements[i].name){
+      arr.push(elements[i]);
+    }
+  }
+  // 循环判断控件类型
+  for(var i = 0;i<arr.length;i++){
+    if(arr[i].type === "text"){
+      result += arr[i].name + '=' + arr[i].value + '&';
+    } else if(arr[i].type === 'radio' && arr[i].checked) {
+      result += arr[i].name + '=' + arr[i].value + '&';
+    }else if(arr[i].type === "checkbox"){
+      result += arr[i].name + '=' + arr[i].value + '&';
+    }
+  }
+  // 清除结尾多余的&
+  result = result.slice(0, -1);
+  return result;
+}
